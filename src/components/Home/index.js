@@ -6,56 +6,48 @@ import {
     SearchIcon,
     ButtonAsLink,
 } from './styled';
+import Message from '../shared/Message';
 import { withRouter } from 'react-router';
+import { observer, inject } from 'mobx-react';
 
+@inject('forecastStore')
+@observer
 class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            city: '',
-            location: '',
-        };
-    }
     handleSubmitCity = () => {
         this.props.history.push({
             pathname: '/forecast',
-            search: `?city=${this.state.city}`,
+            search: `?city=${this.props.forecastStore.city}`,
         });
     };
-    handleUpdateCity = e => {
-        let city = e.target.value;
-        this.setState(() => {
-            return {
-                city,
-            };
-        });
-    };
-    getUserGeoLocation = () => {
-        navigator.geolocation.getCurrentPosition(
-            position => {
-                this.props.history.push({
-                    pathname: '/forecast',
-                    search: `?lat=${position.coords.latitude}&lon=${
-                        position.coords.longitude
-                    }`,
-                });
-            },
-            error => {
-                console.error(JSON.stringify(error));
-            },
-            { enableHighAccuracy: true, timeout: 30000, maximumAge: 27000 }
-        );
+
+    handleSubmitGeoLocation = async () => {
+        try {
+            const position = await this.props.forecastStore.getCurrentPosition();
+            this.props.history.push({
+                pathname: '/forecast',
+                search: `?lat=${position.coords.latitude}&lon=${
+                    position.coords.longitude
+                }`,
+            });
+        } catch (err) {
+            this.props.forecastStore.setError(err);
+        }
     };
 
     render() {
+        const { forecastErrors } = this.props.forecastStore;
+
         return (
             <LocationContainer>
+                {forecastErrors && <Message>forecastErrors</Message>}
                 <LocationForm onSubmit={e => this.handleSubmitCity(e)}>
                     <LocationInput
-                        onChange={this.handleUpdateCity}
+                        onChange={e =>
+                            this.props.forecastStore.setCity(e.target.value)
+                        }
                         placeholder="City"
                         type="text"
-                        value={this.state.city}
+                        value={this.props.forecastStore.city}
                     />
                     <SearchIcon />
                 </LocationForm>
@@ -63,7 +55,9 @@ class Home extends Component {
                 <br />
                 <span>
                     use my{' '}
-                    <ButtonAsLink onClick={() => this.getUserGeoLocation()}>
+                    <ButtonAsLink
+                        onClick={() => this.handleSubmitGeoLocation()}
+                    >
                         current location
                     </ButtonAsLink>
                 </span>

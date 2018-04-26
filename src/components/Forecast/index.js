@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import {
-    getFullDate,
-    getDay,
-    convertTemp,
-    mapTimeOfDay,
-} from '../../utils/helpers';
+import { getFullDate, getDay, mapTimeOfDay } from '../../utils/helpers';
 import queryString from 'query-string';
 import {
     TempUnitSlider,
@@ -23,109 +18,36 @@ import {
     ExtendedForecastItem,
     ForecastTemperatureUnit,
     ForecastThumbnail,
-    CityNotFound,
 } from './styled';
-import FaHome from 'react-icons/lib/fa/home';
 import Spinner from '../shared/Spinner';
+import NotFound from '../NotFound';
 import StyledLink from '../shared/StyledLink';
-import agent from '../../utils/agent';
+import { observer, inject } from 'mobx-react';
 
-class Forecast extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLoading: true,
-            isChecked: true,
-            temperatureUnit: '°C',
-            cityInfo: '',
-            extendedForecastList: [],
-            forecastDataErrors: undefined,
-        };
-    }
+@inject('forecastStore')
+@observer
+export default class Forecast extends Component {
     componentDidMount() {
         let city = queryString.parse(this.props.location.search).city;
-        let geoCode = queryString.parse(this.props.location.search);
-        const params = {
-            units: 'metric',
-            APPID: process.env.REACT_APP_OPEN_WEATHER_API_KEY,
-            cnt: 7,
+        let geoLocation = {
+            lat: queryString.parse(this.props.location.search).lat,
+            lon: queryString.parse(this.props.location.search).lon,
         };
 
         if (city) {
-            params.q = city;
-            this.fetchForecast(params);
-        } else {
-            params.lat = geoCode.lat;
-            params.lon = geoCode.lon;
-            this.fetchForecast(params);
+            this.props.forecastStore.fetchForecastByCity(city);
         }
-    }
-    componentWillReceiveProps(nextProps) {
-        let geoCode = queryString.parse(this.props.location.search);
-        this.fetchForecast(geoCode);
-    }
 
-    fetchForecast(params) {
-        this.setState(() => {
-            return {
-                isLoading: true,
-                forecastDataErrors: undefined,
-            };
-        });
-
-        return agent.Forecast.get(params)
-            .then(forecastData =>
-                this.setState(() => {
-                    return {
-                        isLoading: false,
-                        cityInfo: forecastData.city,
-                        extendedForecastList: forecastData.list,
-                    };
-                })
-            )
-            .catch(err => {
-                this.setState(() => {
-                    return {
-                        forecastDataErrors: err.response && err.response.body,
-                    };
-                });
-            })
-            .finally(() => {
-                this.setState(() => {
-                    return {
-                        isLoading: false,
-                    };
-                });
-            });
-    }
-
-    handleTempUnitChange() {
-        let { isChecked, temperatureUnit, extendedForecastList } = this.state;
-
-        isChecked = !isChecked;
-        temperatureUnit = isChecked ? '°C' : '°F';
-        extendedForecastList.map(day => {
-            for (let timeOfTheDay in day.temp) {
-                if (day.temp.hasOwnProperty(timeOfTheDay)) {
-                    day.temp[timeOfTheDay] = convertTemp(
-                        temperatureUnit,
-                        day.temp[timeOfTheDay]
-                    );
-                }
-            }
-        });
-
-        this.setState(() => {
-            return {
-                isChecked,
-                temperatureUnit,
-                extendedForecastList,
-            };
-        });
+        if (geoLocation.lat && geoLocation.lon) {
+            this.props.forecastStore.fetchForecastByGeoLocation(geoLocation);
+        }
     }
 
     renderExtendedForecast() {
-        const { temperatureUnit, extendedForecastList } = this.state;
+        const {
+            temperatureUnit,
+            extendedForecastList,
+        } = this.props.forecastStore;
 
         return extendedForecastList.map((listItem, i) => (
             <ExtendedForecastItem key={i}>
@@ -150,7 +72,10 @@ class Forecast extends Component {
     }
 
     renderTodaysTempInfo() {
-        const { temperatureUnit, extendedForecastList } = this.state;
+        const {
+            temperatureUnit,
+            extendedForecastList,
+        } = this.props.forecastStore;
         // the first value of the list is todays temp info
         const todayTempInfo = extendedForecastList[0].temp || null;
 
@@ -171,16 +96,17 @@ class Forecast extends Component {
         });
     }
 
-    renderError = () => (
-        <CityNotFound>
-            <h1>{this.state.forecastDataErrors.message}</h1>
-            <StyledLink to="/">
-                <span>
-                    Back to home <FaHome />
-                </span>
-            </StyledLink>
-        </CityNotFound>
-    );
+    renderErrors = () => {
+        if (this.props.forecastStore.forecastErrors) {
+            return (
+                <NotFound
+                    message={this.props.forecastStore.forecastErrors.message}
+                />
+            );
+        }
+
+        return <NotFound message="Something went wrong, please try again." />;
+    };
 
     renderForecastData = () => {
         const {
@@ -188,11 +114,10 @@ class Forecast extends Component {
             temperatureUnit,
             cityInfo,
             extendedForecastList,
-        } = this.state;
+        } = this.props.forecastStore;
 
         // the first value of the list is todays temp info
         const todayTempInfo = extendedForecastList[0] || null;
-
         return (
             <ForecastContainer>
                 <ForecastCard>
@@ -200,7 +125,9 @@ class Forecast extends Component {
                         <TempUnitSlider>
                             <Input
                                 type="checkbox"
-                                onChange={() => this.handleTempUnitChange()}
+                                onChange={() =>
+                                    this.props.forecastStore.handleTempUnitChange()
+                                }
                             />
                             <TempUnit isChecked={isChecked}>
                                 {temperatureUnit}
@@ -244,17 +171,25 @@ class Forecast extends Component {
         );
     };
 
-    tryRenderForecast() {
-        if (this.state.forecastDataErrors) {
-            return this.renderError();
+    render() {
+        const {
+            isLoadingForecast,
+            extendedForecastList,
+            forecastErrors,
+        } = this.props.forecastStore;
+
+        if (isLoadingForecast && extendedForecastList.length === 0) {
+            return <Spinner />;
         }
 
-        return this.renderForecastData();
-    }
+        if (forecastErrors) {
+            return this.renderErrors();
+        }
 
-    render() {
-        return this.state.isLoading ? <Spinner /> : this.tryRenderForecast();
+        if (extendedForecastList.length > 0) {
+            return this.renderForecastData();
+        } else {
+            return <Spinner />;
+        }
     }
 }
-
-export default Forecast;
