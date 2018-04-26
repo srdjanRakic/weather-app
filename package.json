@@ -1,0 +1,37 @@
+{
+    "name": "weather-app",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "axios": "^0.17.1",
+        "cross-env": "^5.1.4",
+        "promise.prototype.finally": "^3.1.0",
+        "prop-types": "^15.6.0",
+        "query-string": "^6.0.0",
+        "react": "^16.3.2",
+        "react-dom": "^16.3.2",
+        "react-icons": "^2.2.7",
+        "react-loadable": "^5.3.1",
+        "react-router-dom": "^4.2.2",
+        "styled-components": "^3.2.6",
+        "superagent": "^3.8.2",
+        "superagent-promise": "^1.1.0"
+    },
+    "devDependencies": {
+        "eslint-config-prettier": "^2.9.0",
+        "eslint-plugin-prettier": "^2.6.0",
+        "husky": "^0.14.3",
+        "lint-staged": "^7.0.3",
+        "prettier": "1.12.1",
+        "pretty-quick": "^1.4.1",
+        "react-scripts": "1.0.17",
+        "surge": "^0.19.0"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject",
+        "precommit": "pretty-quick --staged"
+    }
+}
