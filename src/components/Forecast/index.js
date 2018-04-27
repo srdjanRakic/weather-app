@@ -52,12 +52,9 @@ export default class Forecast extends Component {
         return extendedForecastList.map((listItem, i) => (
             <ExtendedForecastItem key={i}>
                 <div>{getDay(listItem.dt)}</div>
-                <img
-                    style={{
-                        height: 25,
-                        width: 25,
-                        padding: 5,
-                    }}
+                <ForecastThumbnail
+                    height={25}
+                    width={25}
                     src={require(`../../assets/img/weather-icons/${
                         listItem.weather[0].icon
                     }.svg`)}

@@ -77,9 +77,9 @@ export const ForecastTodaysTemperature = styled.div`
 `;
 
 export const ForecastThumbnail = styled.img`
-    height: 80px;
-    padding-left: 22px;
-    padding-right: 22px;
+    height: ${props => props.height || '80px'};
+    width: ${props => props.width};
+    padding: 5px 22px;
 `;
 
 export const ForecastPeriodOfDayInfo = styled.div`
