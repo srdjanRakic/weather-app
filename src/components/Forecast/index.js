@@ -110,7 +110,6 @@ export default class Forecast extends Component {
 
     renderForecastData = () => {
         const {
-            isChecked,
             temperatureUnit,
             cityInfo,
             extendedForecastList,
@@ -129,7 +128,7 @@ export default class Forecast extends Component {
                                     this.props.forecastStore.handleTempUnitChange()
                                 }
                             />
-                            <TempUnit isChecked={isChecked}>
+                            <TempUnit isChecked={temperatureUnit === '°F'}>
                                 {temperatureUnit}
                             </TempUnit>
                         </TempUnitSlider>

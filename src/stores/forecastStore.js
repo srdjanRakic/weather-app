@@ -1,13 +1,24 @@
 import agent from '../utils/agent';
-import { observable, action } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import { convertTemp } from '../utils/helpers';
 
 export class ForecastStore {
+    constructor() {
+        reaction(
+            () => this.temperatureUnit,
+            temperatureUnit => {
+                if (temperatureUnit) {
+                    this.defaultQueryParams.units =
+                        this.temperatureUnit === '°C' ? 'metric' : 'imperial';
+                }
+            }
+        );
+    }
+
     @observable isLoadingForecast = false;
     @observable forecastErrors = undefined;
 
     @observable city = '';
-    @observable isChecked = true;
     @observable temperatureUnit = '°C';
     @observable cityInfo = '';
     @observable extendedForecastList = [];
@@ -35,8 +46,7 @@ export class ForecastStore {
 
     @action
     handleTempUnitChange() {
-        this.isChecked = !this.isChecked;
-        this.temperatureUnit = this.isChecked ? '°C' : '°F';
+        this.temperatureUnit = this.temperatureUnit === '°C' ? '°F' : '°C';
         this.extendedForecastList.map(day => {
             for (let timeOfTheDay in day.temp) {
                 if (day.temp.hasOwnProperty(timeOfTheDay)) {
