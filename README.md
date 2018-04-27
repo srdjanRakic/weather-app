@@ -10,7 +10,7 @@ Weather app built with React, MobX and styled-components.
 
 ## Demo
 
-Live demo: [weather-app](react-weather-forecast-app.surge.sh)
+Live demo: [weather-app](http://react-weather-forecast-app.surge.sh/)
 
 ## Installing / Getting started
 
