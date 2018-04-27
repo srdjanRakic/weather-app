@@ -14,13 +14,13 @@ export const LocationContainer = styled.div`
 
     // width
     ${media.desktop`width: 50%;`}
-    ${media.laptop`width: 60%;`}
+    ${media.laptop`width: 70%;`}
     ${media.tablet`width: 100%;`}
     ${media.mobileL`width: 100%;`}
 
     // height
     ${media.desktop`height: 50%;`}
-    ${media.laptop`height: 60%;`}
+    ${media.laptop`height: 70%;`}
     ${media.tablet`height: 100%;`}
     ${media.mobileL`height: 100%;`}
 `;

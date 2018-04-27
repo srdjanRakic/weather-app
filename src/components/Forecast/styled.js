@@ -1,17 +1,16 @@
 import styled from 'styled-components';
+import { media } from '../shared/MediaQueries';
 
-export const Card = styled.div`
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-    width: 40%;
+export const ForecastContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 50;
-    width: 800px;
-    margin: 0 auto;
-    background: white;
-    text-align: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 632px;
+    margin: auto;
+    height: 100%;
+    width: 100%;
 `;
 
 export const ForecastGeneralInfo = styled.div`
@@ -55,19 +54,6 @@ export const TempUnit = styled.div`
     left: ${props => (props.isChecked ? '40%' : '5%')};
     text-align: center;
 `;
-
-export const ForecastContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-width: 632px;
-    margin: auto;
-    height: 100%;
-    width: 100%;
-`;
-
 export const ForecastCard = styled.div`
     padding: 20px 16px 24px 16px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
@@ -81,6 +67,7 @@ export const ForecastTodaysInfo = styled.div`
 
 export const ForecastTemperatureUnit = styled.div`
     float: left;
+    ${media.mobileL`font-size: 22px;`};
 `;
 
 export const ForecastTodaysTemperature = styled.div`
