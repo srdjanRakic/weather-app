@@ -2,10 +2,13 @@ import { css } from 'styled-components';
 
 // these sizes are arbitrary and you can set them to whatever you wish
 const sizes = {
-    giant: 1170,
-    desktop: 992,
+    mobileS: 320,
+    mobileM: 375,
+    mobileL: 425,
     tablet: 768,
-    phone: 376,
+    laptop: 1024,
+    laptopL: 1440,
+    desktop: 2560,
 };
 
 // iterate through the sizes and create a media template

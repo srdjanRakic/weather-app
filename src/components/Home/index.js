@@ -30,7 +30,7 @@ class Home extends Component {
                 }`,
             });
         } catch (err) {
-            this.props.forecastStore.setError(err);
+            this.props.forecastStore.setError(err.message);
         }
     };
 
@@ -39,8 +39,8 @@ class Home extends Component {
 
         return (
             <LocationContainer>
-                {forecastErrors && <Message>forecastErrors</Message>}
-                <LocationForm onSubmit={e => this.handleSubmitCity(e)}>
+                {forecastErrors && <Message>{forecastErrors}</Message>}
+                <LocationForm onSubmit={() => this.handleSubmitCity()}>
                     <LocationInput
                         onChange={e =>
                             this.props.forecastStore.setCity(e.target.value)

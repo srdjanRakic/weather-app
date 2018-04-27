@@ -15,6 +15,7 @@ Open your browser and visit http://localhost:3000/
 
 *   [Create React App](https://github.com/facebook/create-react-app)
 *   [Styled Components](https://github.com/styled-components/styled-components)
+*   [MobX](https://github.com/mobxjs/mobx)
 
 ### Building
 

@@ -52,10 +52,7 @@ export const TempUnit = styled.div`
     position: absolute;
     border-radius: 50%;
     transition: 0.1s ease;
-    width: 18px;
-    height: 18px;
-    top: 1px;
-    left: ${props => (props.isChecked ? '50%' : '1px')};
+    left: ${props => (props.isChecked ? '40%' : '5%')};
     text-align: center;
 `;
 
@@ -123,9 +120,4 @@ export const ExtendedForecastItem = styled.div`
     width: 73px;
     text-align: center;
     line-height: 1;
-`;
-
-export const CityNotFound = styled.div`
-    display: inline-block;
-    text-align: center;
 `;
