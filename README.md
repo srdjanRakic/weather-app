@@ -1,7 +1,10 @@
-# React Weather
+# React Weather App
 
-Weather app built with React.
-[Demo](react-weather-forecast-app.surge.sh)
+Weather app built with React, MobX and styled-components.
+
+## Demo
+
+Live demo: [weather-app](react-weather-forecast-app.surge.sh)
 
 ## Installing / Getting started
 
@@ -25,3 +28,13 @@ yarn build
 ```
 
 All the static files will be in the build folder.
+
+## Deployment
+
+```shell
+yarn deploy
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
