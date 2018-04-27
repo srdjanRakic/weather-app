@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getFullDate, getDay, mapTimeOfDay } from '../../utils/helpers';
-import queryString from 'query-string';
+import qs from 'qs';
 import {
     TempUnitSlider,
     Input,
@@ -28,10 +28,10 @@ import { observer, inject } from 'mobx-react';
 @observer
 export default class Forecast extends Component {
     componentDidMount() {
-        let city = queryString.parse(this.props.location.search).city;
+        let city = qs.parse(this.props.location.search.slice(1)).city;
         let geoLocation = {
-            lat: queryString.parse(this.props.location.search).lat,
-            lon: queryString.parse(this.props.location.search).lon,
+            lat: qs.parse(this.props.location.search.slice(1)).lat,
+            lon: qs.parse(this.props.location.search.slice(1)).lon,
         };
 
         if (city) {
