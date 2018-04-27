@@ -5,13 +5,7 @@ const superagent = superagentPromise(_superagent, global.Promise);
 // API'S
 const openWeatherApi = process.env.REACT_APP_OPEN_WEATHER_API;
 
-const handleErrors = err => {
-    if (err && err.response && err.response.status === 401) {
-        // openNotificationWithIcon('error', err.response, err);
-    }
-    return err;
-};
-
+const handleErrors = err => err;
 const responseBody = res => res.body;
 
 const requests = {
