@@ -2,6 +2,12 @@
 
 Weather app built with React, MobX and styled-components.
 
+### Built With
+
+*   [Create React App](https://github.com/facebook/create-react-app)
+*   [Styled Components](https://github.com/styled-components/styled-components)
+*   [MobX](https://github.com/mobxjs/mobx)
+
 ## Demo
 
 Live demo: [weather-app](react-weather-forecast-app.surge.sh)
@@ -14,12 +20,6 @@ yarn run start
 ```
 
 Open your browser and visit http://localhost:3000/
-
-### Built With
-
-*   [Create React App](https://github.com/facebook/create-react-app)
-*   [Styled Components](https://github.com/styled-components/styled-components)
-*   [MobX](https://github.com/mobxjs/mobx)
 
 ### Building
 
